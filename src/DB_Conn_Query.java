@@ -15,9 +15,9 @@ class DB_Conn_Query {
 		String password = "1234";
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
-			System.out.println("µå¶óÀÌ¹ö ÀûÀç ¼º°ø");
+			System.out.println("ë“œë¼ì´ë²„ ì ì¬ ì„±ê³µ");
 			con = DriverManager.getConnection(url, id, password);
-			System.out.println("DB ¿¬°á ¼º°ø");
+			System.out.println("DB ì—°ê²° ì„±ê³µ");
 		} catch (ClassNotFoundException e) {
 			System.out.println("No Driver.");
 		} catch (SQLException e) {
@@ -25,9 +25,9 @@ class DB_Conn_Query {
 		}
 	}
 
-	public void abandoned_dog_sqlrun(DefaultTableModel model) // À¯±â°ß ÆĞ³Î
+	public void abandoned_dog_sqlrun(DefaultTableModel model) // ìœ ê¸°ê²¬ íŒ¨ë„
 	{
-		String query1 = "select * from À¯±â°ß";
+		String query1 = "select * from ìœ ê¸°ê²¬";
 		try {
 			Statement stmt1 = con.createStatement();
 			ResultSet rs1 = stmt1.executeQuery(query1);
@@ -45,9 +45,9 @@ class DB_Conn_Query {
 		}
 	}
 
-	public void missing_record_sqlrun(DefaultTableModel model) // ½Å°í±â·Ï ÆĞ³Î
+	public void missing_record_sqlrun(DefaultTableModel model) // ì‹ ê³ ê¸°ë¡ íŒ¨ë„
 	{
-		String query2 = "select * from ½Å°í±â·Ï";
+		String query2 = "select * from ì‹ ê³ ê¸°ë¡";
 		try {
 			Statement stmt2 = con.createStatement();
 			ResultSet rs2 = stmt2.executeQuery(query2);
@@ -68,9 +68,9 @@ class DB_Conn_Query {
 		}
 	}
 
-	public void adopt_request_sqlrun(DefaultTableModel model) // ÀÔ¾ç½ÅÃ» ÆĞ³Î
+	public void adopt_request_sqlrun(DefaultTableModel model) // ì…ì–‘ì‹ ì²­ íŒ¨ë„
 	{
-		String query3 = "select * from ÀÔ¾ç½ÅÃ»";
+		String query3 = "select * from ì…ì–‘ì‹ ì²­";
 		try {
 			Statement stmt3 = con.createStatement();
 			ResultSet rs3 = stmt3.executeQuery(query3);
