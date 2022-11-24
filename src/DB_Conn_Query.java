@@ -51,14 +51,13 @@ class DB_Conn_Query {
 		try {
 			Statement stmt2 = con.createStatement();
 			ResultSet rs2 = stmt2.executeQuery(query2);
-			String row2[] = new String[6];
+			String row2[] = new String[5];
 			while (rs2.next()) {
 				row2[0] = rs2.getString(1);
 				row2[1] = rs2.getString(2);
 				row2[2] = rs2.getString(3);
-				row2[3] = rs2.getString(4);
-				row2[4] = rs2.getString(5);
-				row2[5] = rs2.getString(8);
+				row2[3] = rs2.getDate(8).toString();
+				row2[4] = rs2.getString(9);
 				model.addRow(row2);
 			}
 			stmt2.close();
@@ -74,13 +73,12 @@ class DB_Conn_Query {
 		try {
 			Statement stmt3 = con.createStatement();
 			ResultSet rs3 = stmt3.executeQuery(query3);
-			String row3[] = new String[5];
+			String row3[] = new String[4];
 			while (rs3.next()) {
 				row3[0] = rs3.getString(1);
 				row3[1] = rs3.getDate(2).toString();
 				row3[2] = rs3.getString(3);
-				row3[3] = rs3.getString(6);
-				row3[4] = rs3.getString(7);
+				row3[3] = rs3.getString(7);
 				model.addRow(row3);
 			}
 			stmt3.close();

@@ -18,24 +18,24 @@ public class DBlist {
 	private JPanel panel,panel2,panel3,panel4;
 	private JTabbedPane pane;
 
-	public DBlist() { //»ı¼ºÀÚ
+	public DBlist() { //ìƒì„±ì
 		initialize();
 		
 	}
 	
-	private String colName1[] = { "È¸¿øID", "ÀÌ¸§", "³ªÀÌ" }; // ÄÃ·³¸íÀ» ¹è¿­¿¡ ¼±¾ğ
+	private String colName1[] = { "íšŒì› ID", "ì´ë¦„", "ë‚˜ì´" }; // ì»¬ëŸ¼ëª…ì„ ë°°ì—´ì— ì„ ì–¸
     public DefaultTableModel model = new DefaultTableModel(colName1, 0) {
     	public boolean isCellEditable(int rowIndex, int mColIndex) {
     		return false;
     	}
     }; //
-    private String colName2[] = { "¹İ·Á°ß ÀÌ¸§", "¹İ·Á°ß Ç°Á¾", "½ÇÁ¾µÈ ³¯Â¥","È¸¿ø ¾ÆÀÌµğ"}; // ÄÃ·³¸íÀ» ¹è¿­¿¡ ¼±¾ğ
+    private String colName2[] = { "ë™ë¬¼ë“±ë¡ë²ˆí˜¸","ë°˜ë ¤ê²¬ ì´ë¦„", "ë°˜ë ¤ê²¬ í’ˆì¢…", "ì‹¤ì¢…ëœ ë‚ ì§œ","ì‹ ê³ ì ID"}; // ì»¬ëŸ¼ëª…ì„ ë°°ì—´ì— ì„ ì–¸
     public DefaultTableModel model1 = new DefaultTableModel(colName2, 0) {
     	public boolean isCellEditable(int rowIndex, int mColIndex) {
     		return false;
     	}
     }; //
-    private String colName3[] = { "1", "2", "3","4","5" }; // ÄÃ·³¸íÀ» ¹è¿­¿¡ ¼±¾ğ
+    private String colName3[] = { "ì…ì–‘ì‹ ì²­ë²ˆí˜¸", "ì‹ ì²­ì¼ì", "ìœ ê¸°ê²¬ì´ë¦„","ì…ì–‘ì ID"}; // ì»¬ëŸ¼ëª…ì„ ë°°ì—´ì— ì„ ì–¸
     public DefaultTableModel model2 = new DefaultTableModel(colName3, 0) {
     	public boolean isCellEditable(int rowIndex, int mColIndex) {
     		return false;
@@ -43,15 +43,14 @@ public class DBlist {
     }; //
 
 
-
 	private void initialize() {
-		frame = new JFrame(); //ÇÁ·¹ÀÓ »ı¼º
+		frame = new JFrame(); //í”„ë ˆì„ ìƒì„±
 		frame.setBounds(100, 100, 700, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		panel = new JPanel();
-		panel2 = new JPanel(); //ÆĞ³Î »ı¼º
-		panel3 = new JPanel(); //ÆĞ³Î »ı¼º
-		panel4 = new JPanel(); //ÆĞ³Î »ı¼º
+		panel2 = new JPanel(); //íŒ¨ë„ ìƒì„±
+		panel3 = new JPanel(); //íŒ¨ë„ ìƒì„±
+		panel4 = new JPanel(); //íŒ¨ë„ ìƒì„±
 		frame.setContentPane(panel);
 		table = new JTable(model);
 		table1 = new JTable(model1);
@@ -77,14 +76,14 @@ public class DBlist {
 		table.setBounds(12, 118, 575, 335); 
 		frame.setResizable(false);
 		panel.setLayout(null);
-		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // ÇÏ³ª¸¸ ¼±ÅÃ
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // í•˜ë‚˜ë§Œ ì„ íƒ
 		pane = new JTabbedPane(JTabbedPane.TOP);
 		pane.setBounds(0, 0, 686, 453);
-        pane.add("À¯±â°ß ¸ñ·Ï", panel2);  // À¯±â°ß ÅÇ
-        pane.add("½ÇÁ¾ ¹İ·Á°ß ¸ñ·Ï", panel3);
-        pane.add("ÀÔ¾ç ½ÅÃ» ¸ñ·Ï",panel4);
+        pane.add("ìœ ê¸°ê²¬ ëª©ë¡", panel2);  // ìœ ê¸°ê²¬ íƒ­
+        pane.add("ì‹¤ì¢… ë°˜ë ¤ê²¬ ëª©ë¡", panel3);
+        pane.add("ì…ì–‘ ì‹ ì²­ ëª©ë¡",panel4);
 		frame.getContentPane().add(pane);
-		frame.setVisible(true); // º¸ÀÌ°Ô ÇÏ´Â°Å
+		frame.setVisible(true); // ë³´ì´ê²Œ í•˜ëŠ”ê±°
 
 	}
 }
