@@ -19,29 +19,42 @@ public class DBlist {
 	private JTabbedPane pane;
 
 	public DBlist() { //생성자
-		initialize();
+		make_main_frame();
 
 		
 	}
 	
-	private String colName1[] = { "회원 ID", "이름", "나이" }; // 컬럼명을 배열에 선언
+	private String colName1[] = { "유기견번호", "유기견이름", "품종" }; // 컬럼명을 배열에 선언
     public DefaultTableModel model1 = new DefaultTableModel(colName1, 0) {
     	public boolean isCellEditable(int rowIndex, int mColIndex) {		// 목록(JTable) 값 수정 못하게 하는 메소드
     		return false;
     	}
-    }; //
-    private String colName2[] = { "동물등록번호","반려견 이름", "반려견 품종", "실종된 날짜","신고자 ID"}; // 컬럼명을 배열에 선언
-    public DefaultTableModel model2 = new DefaultTableModel(colName2, 0) {		// 목록(JTable) 값 수정 못하게 하는 메소드
-    	public boolean isCellEditable(int rowIndex, int mColIndex) {
+    };
+    private String colName2[] = { "유기견번호", "유기견이름", "유기견품종","성별","나이",
+    								"몸무게","구조일자","발견장소","보호등록번호","보호기관번호"};
+    public DefaultTableModel model2 = new DefaultTableModel(colName2, 0);// 컬럼명을 배열에 선언//
+    
+    private String colName3[] = { "동물등록번호","반려견 이름", "반려견 품종", "실종된 날짜","신고자 아이디"}; // 컬럼명을 배열에 선언
+    public DefaultTableModel model3 = new DefaultTableModel(colName3, 0) {
+    	public boolean isCellEditable(int rowIndex, int mColIndex) {		// 목록(JTable) 값 수정 못하게 하는 메소드
+    		return false;
+    	}
+    };
+    
+    private String colName4[] =  { "동물등록번호", "반려견이름", "반려견품종","성별","특이사항",
+								"실종장소","실종된시간","실종된날짜","신고자 아이디"};
+    public DefaultTableModel model4 = new DefaultTableModel(colName4, 0);
+    
+    private String colName5[] = { "입양신청번호", "신청일자", "유기견이름","입양자 ID"}; // 컬럼명을 배열에 선언
+    public DefaultTableModel model5 = new DefaultTableModel(colName5, 0) {
+    	public boolean isCellEditable(int rowIndex, int mColIndex) {		// 목록(JTable) 값 수정 못하게 하는 메소드
     		return false;
     	}
     }; //
-    private String colName3[] = { "입양신청번호", "신청일자", "유기견이름","입양자 ID"}; // 컬럼명을 배열에 선언
-    public DefaultTableModel model3 = new DefaultTableModel(colName3, 0) {		// 목록(JTable) 값 수정 못하게 하는 메소드
-    	public boolean isCellEditable(int rowIndex, int mColIndex) {
-    		return false;
-    	}
-    }; //
+    
+    private String colName6[] = { "입양신청번호", "신청일자", "유기견이름","입양자 ID"}; // 컬럼명을 배열에 선언
+    public DefaultTableModel model6 = new DefaultTableModel(colName6, 0);
+    
 
     private JPanel make_sub_panel(JPanel panel,JTable table, JScrollPane scroll,DefaultTableModel model) {
     	panel = new JPanel(); 									// 서브 패널 생성
@@ -58,15 +71,15 @@ public class DBlist {
     }
     
     
-	private void initialize() {
+	private void make_main_frame() {
 		frame = new JFrame(); //프레임 생성
 		frame.setBounds(100, 100, 700, 500);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		main_panel = new JPanel();								// 메인 패널 생성
 		frame.setContentPane(main_panel);						// 패널을 컨텐트 팬처럼 사용하기 위한 메소드
 		panel1 = make_sub_panel(panel1,table1,scroll1,model1);	// 유기견 목록 패널 생성
-		panel2 = make_sub_panel(panel2,table2,scroll2,model2);	// 실종 신고 목록 패널 생성
-		panel3 = make_sub_panel(panel3,table3,scroll3,model3);	// 입양 신청 목록 패널 생성
+		panel2 = make_sub_panel(panel2,table2,scroll2,model3);	// 실종 신고 목록 패널 생성
+		panel3 = make_sub_panel(panel3,table3,scroll3,model5);	// 입양 신청 목록 패널 생성
 		frame.setResizable(false);								// 메인 GUI 크기 변경 불가
 		main_panel.setLayout(null);
 		pane = new JTabbedPane(JTabbedPane.TOP);
@@ -77,6 +90,17 @@ public class DBlist {
 		frame.getContentPane().add(pane);	// 프레임 >> 컨텐트팬(메인패널) >> 탭(pane)
 		frame.setVisible(true); // 보이게 하는거
 
+	}
+	private void make_sub_frame(JFrame frame, JPanel panel,JTable table,DefaultTableModel model) {
+		frame = new JFrame();
+		frame.setBounds(100, 100, 600, 200);
+		panel = new JPanel();								// 메인 패널 생성
+		frame.setContentPane(main_panel);
+		panel.setLayout(null);
+		
+		table = new JTable(model);
+		table.setBounds(0, 0, 500, 200);
+		main_panel.add(table);
 	}
 }
 
