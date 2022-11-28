@@ -1,86 +1,104 @@
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 import javax.swing.table.DefaultTableModel;
 
+import DTO.abandoned_dog;
+import DTO.missing;
+
 class DB_Conn_Query {
+
 	Connection con = null;
+	Statement st1, st2, st3, st4,st5,st6 = null;
+	ResultSet rs1, rs2, rs3, rs4,rs5,rs6 = null;
+	PreparedStatement pst = null;
+	CallableStatement cst = null;
+
+	String url = "jdbc:oracle:thin:@localhost:1521:XE";
+	String id = "DOG";
+	String password = "1234";
 
 	public DB_Conn_Query() {
-		String url = "jdbc:oracle:thin:@localhost:1521:XE";
-		String id = "dog";
-		String password = "1234";
 		try {
 			Class.forName("oracle.jdbc.driver.OracleDriver");
 			System.out.println("드라이버 적재 성공");
-			con = DriverManager.getConnection(url, id, password);
-			System.out.println("DB 연결 성공");
 		} catch (ClassNotFoundException e) {
 			System.out.println("No Driver.");
+		}
+	}
+
+	public void Oracle_Connect() {
+		try {
+			con = DriverManager.getConnection(url, id, password);
+			System.out.println("DB 연결 성공");
 		} catch (SQLException e) {
 			System.out.println("Connection Fail");
 		}
 	}
 
-	public void abandoned_dog_sqlrun(DefaultTableModel model, int choice, int abandoned_dog_key) // 유기견 패널
-	{
-		if (choice == 0) {										// 메인 패널
-			String query1 = "select * from 유기견";				// 탭에 유기견 간추린 데이터 목록
+	public ArrayList<abandoned_dog> read_abandoned_dog() {
+		ArrayList<abandoned_dog> arr1 = new ArrayList<abandoned_dog>();
+		try {
+			Oracle_Connect();
+			String sql1 = "select * from 유기견";
+			st1 = con.createStatement();
+			rs1 = st1.executeQuery(sql1);
+
+			while (rs1.next()) {
+				arr1.add(new abandoned_dog(rs1.getInt(1), rs1.getString(2), rs1.getString(3)));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
 			try {
-				Statement stmt1 = con.createStatement();
-				ResultSet rs1 = stmt1.executeQuery(query1);
-				String row1[] = new String[3];
-				while (rs1.next()) {
-					row1[0] = rs1.getString(1);
-					row1[1] = rs1.getString(2);
-					row1[2] = rs1.getString(3);
-					model.addRow(row1);
-				}
-				stmt1.close();
+				st1.close();
 				rs1.close();
 				con.close();
-				System.out.println("DB 연결 종료");
-			} catch (SQLException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
-
-		else { // 서브 프레임에 사용할 sql
-			String query2 = "select * from 유기견 where 유기견번호 =" + abandoned_dog_key; // JTable에서 선택한 데이터의 기본키를
-			try { // 읽어와서 where절에 넣음
-				Statement stmt2 = con.createStatement();
-				ResultSet rs2 = stmt2.executeQuery(query2);
-				String row2[] = new String[10];
-				while (rs2.next()) {
-					row2[0] = rs2.getString(1);
-					row2[1] = rs2.getString(2);
-					row2[2] = rs2.getString(3);
-					row2[3] = rs2.getString(4);
-					row2[4] = rs2.getString(5);
-					row2[5] = rs2.getString(6);
-					row2[6] = rs2.getString(7);
-					row2[7] = rs2.getString(8);
-					row2[8] = rs2.getString(9);
-					row2[9] = rs2.getString(10);
-					model.addRow(row2);
-				}
-				stmt2.close();
-				rs2.close();
-				con.close();
-				System.out.println("DB 연결 종료");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
+		return arr1;
 	}
 
-	public void missing_record_sqlrun(DefaultTableModel model, int choice, String missing_record_key) // 유기견 패널
+	public ArrayList<abandoned_dog> read_abandoned_dog1(int key) {
+		ArrayList<abandoned_dog> arr2 = new ArrayList<abandoned_dog>();
+		try {
+			Oracle_Connect();
+			String sql2 = "select * from 유기견 where 유기견번호 = "+key;
+			st2 = con.createStatement();
+			rs2 = st2.executeQuery(sql2);
+			while (rs2.next()) {
+				arr2.add(new abandoned_dog(rs2.getInt(1), rs2.getString(2), rs2.getString(3), rs2.getString(4),
+						rs2.getString(5), rs2.getString(6), rs2.getString(7), rs2.getString(8), rs2.getString(9),
+						rs2.getString(10)));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				st2.close();
+				rs2.close();
+				con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return arr2;
+	}
+	
+	public void missing_record_sqlrun(DefaultTableModel model, int choice, int missing_record_key) // 유기견 패널
 	{
-		if (choice == 0) {										// 메인 패널
-			String query3 = "select * from 신고기록";				// 탭에 신고기록 간추린 데이터 목록
+		if (choice == 0) { // 메인 패널
+			String query3 = "select * from 신고기록"; // 탭에 신고기록 간추린 데이터 목록
 			try {
 				Statement stmt3 = con.createStatement();
 				ResultSet rs3 = stmt3.executeQuery(query3);
@@ -128,11 +146,64 @@ class DB_Conn_Query {
 		}
 
 	}
+	
+	public ArrayList<missing> missing_record_sqlrun() {
+		ArrayList<missing> arr3 = new ArrayList<missing>();
+		try {
+			Oracle_Connect();
+			String sql3 = "select * from 신고기록";
+			st3 = con.createStatement();
+			rs3 = st3.executeQuery(sql3);
+
+			while (rs3.next()) {
+				arr3.add(new missing(rs3.getString(1), rs3.getString(2), rs3.getString(3),rs3.getDate(8),rs3.getString(9)));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				st3.close();
+				rs3.close();
+				con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return arr3;
+	}
+
+	public ArrayList<missing> missing_record_sqlrun(String key) {
+		ArrayList<missing> arr4 = new ArrayList<missing>();
+		try {
+			Oracle_Connect();
+			String sql4 = "select * from 유기견 where 유기견번호 = "+ key;
+			st4 = con.createStatement();
+			rs4 = st4.executeQuery(sql4);
+			while (rs4.next()) {
+				arr4.add(new missing(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4),
+						rs4.getString(5), rs4.getString(6), rs4.getString(7), rs4.getDate(8), rs4.getString(9)
+						));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				st4.close();
+				rs4.close();
+				con.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return arr4;
+	}
 
 	public void adopt_request_sqlrun(DefaultTableModel model, int choice, String adopt_request_key) // 입양신청 패널
 	{
-		if (choice == 0) {										// 메인 패널
-			String query5 = "select * from 입양신청";				// 탭에 입양신청 간추린 데이터 목록
+		if (choice == 0) { // 메인 패널
+			String query5 = "select * from 입양신청"; // 탭에 입양신청 간추린 데이터 목록
 			try {
 				Statement stmt5 = con.createStatement();
 				ResultSet rs5 = stmt5.executeQuery(query5);
