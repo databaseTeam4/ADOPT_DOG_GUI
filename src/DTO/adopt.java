@@ -1,16 +1,18 @@
 package DTO;
 
+import java.sql.Date;
+
 public class adopt{
 
 	String adopt_num;
-	String adopt_date;
+	Date adopt_date;
 	String adopt_dog_name;
 	String adopt_dog_kind;
 	String adopt_dog_sex;
 	String shelter_num;
 	String id;
 	
-	public adopt(String adopt_num, String adopt_date, String adopt_dog_name, String adopt_dog_kind, String adopt_dog_sex,
+	public adopt(String adopt_num, Date adopt_date, String adopt_dog_name, String adopt_dog_kind, String adopt_dog_sex,
 			String shelter_num, String id) {
 		
 		this.adopt_num = adopt_num;
@@ -30,11 +32,11 @@ public class adopt{
 		this.adopt_num = adopt_num;
 	}
 
-	public String getAdopt_date() {
+	public Date getAdopt_date() {
 		return adopt_date;
 	}
 
-	public void setAdopt_date(String adopt_date) {
+	public void setAdopt_date(Date adopt_date) {
 		this.adopt_date = adopt_date;
 	}
 

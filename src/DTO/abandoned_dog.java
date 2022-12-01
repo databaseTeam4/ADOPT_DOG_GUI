@@ -25,10 +25,12 @@ public class abandoned_dog {
 		this.protect_num = protect_num;
 		this.protection_agency = protection_agency;
 	}
-	public abandoned_dog(int num, String name, String kind) {
+	public abandoned_dog(int num, String name, String kind, String gender,String protection_agency) {
 		this.num = num;
 		this.name = name;
 		this.kind = kind;
+		this.gender = gender;
+		this.protection_agency = protection_agency;
 	}
 
 	public int getNum() {
