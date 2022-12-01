@@ -1,22 +1,13 @@
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 
-import DTO.abandoned_dog;
-import DTO.adopt;
-import DTO.missing;
-import DTO.protection_agency;
+import DTO.*;
 
 class DB_Conn_Query {
 
 	Connection con = null;
-	Statement st1, st2, st3, st4,st5,st6 = null;
-	ResultSet rs1, rs2, rs3, rs4,rs5,rs6 = null;
+	Statement st1, st2, st3, st4, st5, st6,st7 = null;
+	ResultSet rs1, rs2, rs3, rs4, rs5, rs6,rs7 = null;
 	PreparedStatement pst = null;
 	CallableStatement cst = null;
 
@@ -51,7 +42,8 @@ class DB_Conn_Query {
 			rs1 = st1.executeQuery(sql1);
 
 			while (rs1.next()) {
-				arr1.add(new abandoned_dog(rs1.getInt(1), rs1.getString(2), rs1.getString(3), rs1.getString(4), rs1.getString(10)));
+				arr1.add(new abandoned_dog(rs1.getInt(1), rs1.getString(2), rs1.getString(3), rs1.getString(4),
+						rs1.getString(10)));
 			}
 
 		} catch (SQLException e) {
@@ -61,7 +53,7 @@ class DB_Conn_Query {
 				st1.close();
 				rs1.close();
 				con.close();
-				System.out.println("DB 연결 해제");				
+				System.out.println("DB 연결 해제");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -73,7 +65,7 @@ class DB_Conn_Query {
 		ArrayList<abandoned_dog> arr2 = new ArrayList<abandoned_dog>();
 		try {
 			Oracle_Connect();
-			String sql2 = "select * from 유기견 where 유기견번호 = "+key;
+			String sql2 = "select * from 유기견 where 유기견번호 = " + key;
 			st2 = con.createStatement();
 			rs2 = st2.executeQuery(sql2);
 			while (rs2.next()) {
@@ -96,8 +88,7 @@ class DB_Conn_Query {
 		}
 		return arr2;
 	}
-	
-	
+
 	public ArrayList<missing> missing_record_sqlrun() {
 		ArrayList<missing> arr3 = new ArrayList<missing>();
 		try {
@@ -107,7 +98,8 @@ class DB_Conn_Query {
 			rs3 = st3.executeQuery(sql3);
 
 			while (rs3.next()) {
-				arr3.add(new missing(rs3.getString(1), rs3.getString(2), rs3.getString(3),rs3.getDate(8),rs3.getString(9)));
+				arr3.add(new missing(rs3.getString(1), rs3.getString(2), rs3.getString(3), rs3.getDate(8),
+						rs3.getString(9)));
 			}
 
 		} catch (SQLException e) {
@@ -129,13 +121,12 @@ class DB_Conn_Query {
 		ArrayList<missing> arr4 = new ArrayList<missing>();
 		try {
 			Oracle_Connect();
-			String sql4 = "select * from 신고기록 where 동물등록번호 = "+"'"+ key+"'";
+			String sql4 = "select * from 신고기록 where 동물등록번호 = " + "'" + key + "'";
 			st4 = con.createStatement();
 			rs4 = st4.executeQuery(sql4);
 			while (rs4.next()) {
 				arr4.add(new missing(rs4.getString(1), rs4.getString(2), rs4.getString(3), rs4.getString(4),
-						rs4.getString(5), rs4.getString(6), rs4.getString(7), rs4.getDate(8), rs4.getString(9)
-						));
+						rs4.getString(5), rs4.getString(6), rs4.getString(7), rs4.getDate(8), rs4.getString(9)));
 			}
 
 		} catch (SQLException e) {
@@ -152,7 +143,7 @@ class DB_Conn_Query {
 		}
 		return arr4;
 	}
-	
+
 	public ArrayList<adopt> adopt_record_sqlrun() {
 		ArrayList<adopt> arr5 = new ArrayList<adopt>();
 		try {
@@ -162,8 +153,8 @@ class DB_Conn_Query {
 			rs5 = st5.executeQuery(sql5);
 
 			while (rs5.next()) {
-				arr5.add(new adopt(rs5.getString(1), rs5.getDate(2), rs5.getString(3),
-						rs5.getString(4), rs5.getString(5), rs5.getString(6), rs5.getString(7)));
+				arr5.add(new adopt(rs5.getString(1), rs5.getDate(2), rs5.getString(3), rs5.getString(4),
+						rs5.getString(5), rs5.getString(6), rs5.getString(7)));
 			}
 
 		} catch (SQLException e) {
@@ -180,7 +171,7 @@ class DB_Conn_Query {
 		}
 		return arr5;
 	}
-	
+
 	public ArrayList<protection_agency> protection_agency_sqlrun() {
 		ArrayList<protection_agency> arr6 = new ArrayList<protection_agency>();
 		try {
@@ -190,16 +181,16 @@ class DB_Conn_Query {
 			rs6 = st6.executeQuery(sql6);
 
 			while (rs6.next()) {
-				arr6.add(new protection_agency(rs6.getString(1), rs6.getString(2), rs6.getString(3),
-						rs6.getString(4), rs6.getInt(5)));
+				arr6.add(new protection_agency(rs6.getString(1), rs6.getString(2), rs6.getString(3), rs6.getString(4),
+						rs6.getInt(5)));
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		} finally {
 			try {
-				st5.close();
-				rs5.close();
+				st6.close();
+				rs6.close();
 				con.close();
 				System.out.println("DB 연결 해제");
 			} catch (Exception e) {
@@ -208,5 +199,32 @@ class DB_Conn_Query {
 		}
 		return arr6;
 	}
-	
+
+	public ArrayList<member> member_sqlrun() {
+		ArrayList<member> arr7 = new ArrayList<member>();
+		try {
+			Oracle_Connect();
+			String sql7 = "select * from 회원";
+			st7 = con.createStatement();
+			rs7 = st7.executeQuery(sql7);
+
+			while (rs7.next()) {
+				arr7.add(new member(rs7.getString(1), rs7.getString(2), rs7.getInt(3),
+						rs7.getString(4),rs7.getString(5)));
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				st7.close();
+				rs7.close();
+				con.close();
+				System.out.println("DB 연결 해제");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return arr7;
+	}
 }
