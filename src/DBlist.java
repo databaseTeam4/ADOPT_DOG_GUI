@@ -18,25 +18,28 @@ import javax.swing.table.DefaultTableModel;
 
 import DTO.*;
 
-
 public class DBlist {
 
-	private JFrame frame,member_frame;
+	private JFrame frame, member_frame, input_frame;
 	private JTable table1, table2, table3, table4, table5;
 
-	private JScrollPane scroll1, scroll2, scroll3,scroll4,scroll5;
-	private JPanel main_panel, panel, panel1, panel2, panel3,panel4,panel5;
+	private JScrollPane scroll1, scroll2, scroll3, scroll4, scroll5;
+	private JPanel main_panel, panel, panel1, panel2, panel3, panel4, panel5, panel6;
 	private JTabbedPane pane;
-	private JButton Bt1, Bt2, Bt3,Bt4,Bt5;
-	private JTextField search_text,tF_place;
+	private JButton Bt1, Bt2, Bt3, Bt4, Bt5, Bt6, Bt7;
+	private JTextField search_text, tF_place;
 	private JTextField[] tfArray1 = new JTextField[9];
 	private JTextField[] tfArray2 = new JTextField[7];
+	private JTextField[] tfArray3 = new JTextField[8];
 	private JLabel[] tLArray1 = new JLabel[9];
 	private JLabel[] tLArray2 = new JLabel[7];
+	private JLabel[] tLArray3 = new JLabel[8];
 	private JTextArea tA1, tA2, tA3, tA4;
-	private JLabel Lb1, Lb2, Lb3, Lb4,search_Lb,Lb_place;
+	private JLabel Lb1, Lb2, Lb3, Lb4, search_Lb, Lb_place;
 	private DB_Conn_Query dao = new DB_Conn_Query();
-	public DefaultTableModel model1,model2,model3,model4,model5;
+	public DefaultTableModel model1, model2, model3, model4, model5;
+	public String in_name, in_kind, in_gender, in_age, in_weight, in_rescure_date, in_protect_num,
+			in_protection_agency,in_discovery_place;
 
 	public DBlist() { // 생성자
 		make_main_frame();
@@ -50,15 +53,15 @@ public class DBlist {
 			this.table = table;
 		}
 
-		public void mouseClicked(MouseEvent e) {	
+		public void mouseClicked(MouseEvent e) {
 			if (e.getClickCount() == 2) { // 클릭횟수 2번이상
 				detail_page_int_key(table);
 			}
 		}
 	}
-	
+
 	public void detail_page_int_key(JTable table) {
-		int row = table.getSelectedRow();					// 테이블 값반환
+		int row = table.getSelectedRow(); // 테이블 값반환
 		String key = (String) table.getModel().getValueAt(row, 0);
 		sub_alldog_data(Integer.parseInt(key)); // 선택한 목록
 	}
@@ -76,16 +79,16 @@ public class DBlist {
 			}
 		}
 	}
-	
+
 	public void detail_page_str_key(JTable table) {
-		int row = table.getSelectedRow();					// 테이블 값반환
+		int row = table.getSelectedRow(); // 테이블 값반환
 		String key = (String) table.getModel().getValueAt(row, 0);
 		sub_missing_data(key); // 선택한 목록
 	}
 
 	public void main_dog_data() {
 		ArrayList<abandoned_dog> output1 = new ArrayList<abandoned_dog>();
-		String colName1[] = { "유기견번호", "유기견이름", "품종", "성별","보호기관번호" }; // 컬럼명을 배열에 선언
+		String colName1[] = { "유기견번호", "유기견이름", "품종", "성별", "보호기관번호" }; // 컬럼명을 배열에 선언
 		output1 = dao.read_abandoned_dog();
 		int size1 = output1.size();
 		String data1[][] = new String[size1][5];
@@ -135,10 +138,10 @@ public class DBlist {
 			}
 		};
 	}
-	
+
 	public void main_adopt_data() {
 		ArrayList<adopt> output3 = new ArrayList<adopt>();
-		String colName3[] = { "입양신청번호", "신청 일자", "유기견 이름", "유기견 품종", "유기견 성별","보호기관번호","입양자 아이디" }; // 컬럼명을 배열에 선언
+		String colName3[] = { "입양신청번호", "신청 일자", "유기견 이름", "유기견 품종", "유기견 성별", "보호기관번호", "입양자 아이디" }; // 컬럼명을 배열에 선언
 		output3 = dao.adopt_record_sqlrun();
 		int size3 = output3.size();
 		String data3[][] = new String[size3][7];
@@ -165,10 +168,10 @@ public class DBlist {
 			}
 		};
 	}
-	
+
 	public void main_protection_agency_data() {
 		ArrayList<protection_agency> output4 = new ArrayList<protection_agency>();
-		String colName4[] = { "보호기관번호", "보호기관명", "주소", "전화번호", "보호 중인 유기견 수"}; // 컬럼명을 배열에 선언
+		String colName4[] = { "보호기관번호", "보호기관명", "주소", "전화번호", "보호 중인 유기견 수" }; // 컬럼명을 배열에 선언
 		output4 = dao.protection_agency_sqlrun();
 		int size4 = output4.size();
 		String data4[][] = new String[size4][5];
@@ -191,10 +194,10 @@ public class DBlist {
 			}
 		};
 	}
-	
+
 	public void member_data() {
 		ArrayList<member> output5 = new ArrayList<member>();
-		String colName5[] = { "회원 아이디", "이름", "나이", "전화번호", "주소"}; // 컬럼명을 배열에 선언
+		String colName5[] = { "회원 아이디", "이름", "나이", "전화번호", "주소" }; // 컬럼명을 배열에 선언
 		output5 = dao.member_sqlrun();
 		int size5 = output5.size();
 		String data5[][] = new String[size5][5];
@@ -217,7 +220,7 @@ public class DBlist {
 			}
 		};
 	}
-	
+
 	public void sub_alldog_data(int key1) {
 
 		ArrayList<abandoned_dog> output4 = new ArrayList<abandoned_dog>();
@@ -295,8 +298,8 @@ public class DBlist {
 		panel = new JPanel(); // 메인 패널 생성
 		panel.setBounds(0, 0, 897, 305);
 		frame.setContentPane(panel);
-		panel.setLayout(null);		
-		
+		panel.setLayout(null);
+
 		String[] headArr2 = { "동물등록번호", "반려견이름", "반려견품종", "성별", "실종된시간", "실종된날짜", "신고자 아이디" };
 
 		for (int i = 0; i < tLArray2.length; i++) {
@@ -305,7 +308,7 @@ public class DBlist {
 			panel.add(tLArray2[i]);
 		}
 
-		String[] dataArr2 = { animal_num, dog_name, dog_kind, sex, miss_time, miss_date,id };
+		String[] dataArr2 = { animal_num, dog_name, dog_kind, sex, miss_time, miss_date, id };
 
 		for (int i = 0; i < tfArray2.length; i++) {
 			tfArray2[i] = new JTextField();
@@ -314,8 +317,8 @@ public class DBlist {
 			panel.add(tfArray2[i]);
 			tfArray2[i].setText(dataArr2[i]);
 		}
-		
-		Lb_place = new JLabel("실종 장소",JLabel.CENTER);
+
+		Lb_place = new JLabel("실종 장소", JLabel.CENTER);
 		Lb_place.setBounds(300, 190, 100, 28);
 		tF_place = new JTextField();
 		tF_place.setColumns(10);
@@ -323,13 +326,13 @@ public class DBlist {
 		tF_place.setText(miss_place);
 		panel.add(Lb_place);
 		panel.add(tF_place);
-		
+
 		tA2 = new JTextArea();
 		tA2.setColumns(10);
 		tA2.setBounds(124, 256, 710, 64);
 		panel.add(tA2);
 		tA2.setText(unique);
-		
+
 		Lb2 = new JLabel("특이사항", JLabel.CENTER);
 		Lb2.setBounds(12, 256, 100, 64);
 		panel.add(Lb2);
@@ -352,10 +355,10 @@ public class DBlist {
 		scroll5.setBounds(0, 50, 500, 480); // 위치 설정
 		panel5.setLayout(null);
 		Bt5 = new JButton("입양 신청서 작성");
-		Bt5.addActionListener(new ActionListener() {		//상세 정보 버튼
+		Bt5.addActionListener(new ActionListener() { // 상세 정보 버튼
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("입양 신청서 작성?");
-			
+
 			}
 		});
 		Bt5.setBounds(600, 200, 150, 30);
@@ -365,6 +368,81 @@ public class DBlist {
 		member_frame.setVisible(true);
 	}
 
+	public void make_dogdata() {
+		input_frame = new JFrame(); // 프레임 생성
+		input_frame.setBounds(100, 100, 911, 500);
+		input_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		panel6 = new JPanel(); // 메인 패널 생성
+		panel6.setBounds(0, 0, 897, 480);
+		input_frame.setContentPane(panel6);
+		panel6.setLayout(null);
+		String[] headArr3 = { "유기견이름", "유기견품종", "성별", "나이", "몸무게", "구조 일자", "보호등록번호", "보호기관번호" };
+
+		for (int i = 0; i < tLArray3.length; i++) {
+			tLArray3[i] = new JLabel(headArr3[i], JLabel.CENTER);
+			tLArray3[i].setBounds(0 + (300 * (i % 3)), 30 + (80 * ((int) (i / 3))), 100, 28);
+			panel6.add(tLArray3[i]);
+		}
+
+		for (int i = 0; i < tfArray3.length; i++) {
+			tfArray3[i] = new JTextField();
+			tfArray3[i].setColumns(10);
+			tfArray3[i].setBounds(100 + (300 * (i % 3)), 30 + (80 * ((int) (i / 3))), 127, 28);
+			panel6.add(tfArray3[i]);
+		}
+
+		tA3 = new JTextArea();
+		tA3.setColumns(10);
+		tA3.setBounds(124, 256, 710, 64);
+		panel6.add(tA3);
+		in_discovery_place = tA3.getText();
+
+		Lb3 = new JLabel("발견장소", JLabel.CENTER);
+		Lb3.setBounds(12, 256, 100, 64);
+		panel6.add(Lb3);
+
+//		in_name = tfArray3[0].getText();
+//		in_kind = tfArray3[1].getText();
+//		in_gender = tfArray3[2].getText();
+//		in_age = tfArray3[3].getText();
+//		in_weight = tfArray3[4].getText();
+//		in_rescure_date = tfArray3[5].getText();
+//		in_protect_num = tfArray3[6].getText();
+//		in_protection_agency = tfArray3[7].getText();
+
+		Bt6 = new JButton("등록하기");
+		Bt6.setBounds(600, 400, 150, 30);
+		panel6.add(Bt6);
+
+		Bt6.addActionListener(new ActionListener() { // 상세 정보 버튼
+			public void actionPerformed(ActionEvent e) {
+				in_name = tfArray3[0].getText();
+				in_kind = tfArray3[1].getText();
+				in_gender = tfArray3[2].getText();
+				in_age = tfArray3[3].getText();
+				in_weight = tfArray3[4].getText();
+				in_rescure_date = tfArray3[5].getText();
+				in_protect_num = tfArray3[6].getText();
+				in_protection_agency = tfArray3[7].getText();
+				in_discovery_place = tA3.getText();
+				
+				System.out.println("유기견 등록 기능");
+				System.out.println(in_name);
+				System.out.println(in_kind);
+				System.out.println(in_gender);
+				System.out.println(in_age);
+				System.out.println(in_weight);
+				System.out.println(in_rescure_date);
+				System.out.println(in_protect_num);
+				System.out.println(in_protection_agency);
+				System.out.println(in_discovery_place);
+
+			}
+		});
+
+		input_frame.setVisible(true);
+	}
+
 	private void make_main_frame() {
 		frame = new JFrame(); // 프레임 생성
 		frame.setBounds(100, 100, 800, 600);
@@ -372,7 +450,7 @@ public class DBlist {
 		main_panel = new JPanel(); // 메인 패널 생성
 		frame.setContentPane(main_panel); // 패널을 컨텐트 팬처럼 사용하기 위한 메소드
 //		--------------------------------------------------------------------- 메인 UI
-		
+
 		main_dog_data();
 		panel1 = new JPanel(); // 유기견 패널 생성
 		table1 = new JTable(model1); // 입력 받은 DB 데이터들을 JTable에 추가
@@ -385,17 +463,20 @@ public class DBlist {
 		table1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //
 		JtableMouseEvent Click1 = new JtableMouseEvent(table1); // 더블클릭시 상세정보
 		table1.addMouseListener(Click1); //
-		
+
 		Bt1 = new JButton("입양 신청");
 		Bt2 = new JButton("상세 정보");
-		
+		Bt7 = new JButton("유기견 등록");
+
 		Bt1.setBounds(630, 100, 120, 30);
 		Bt2.setBounds(630, 200, 120, 30);
-		
+		Bt7.setBounds(630, 300, 120, 30);
+
 		panel1.add(Bt1);
 		panel1.add(Bt2);
-		
-		Bt1.addActionListener(new ActionListener() {		// 입양 신청 버튼
+		panel1.add(Bt7);
+
+		Bt1.addActionListener(new ActionListener() { // 입양 신청 버튼
 			public void actionPerformed(ActionEvent e) {
 //				int row = table.getSelectedRow();							// 목록에서 선택한 데이터의 행을 반환
 //				String 유기견이름 = (String) table.getModel().getValueAt(row, 1); 	// 데이터의 값을 반환
@@ -404,21 +485,27 @@ public class DBlist {
 //				String 보호기관번호 = (String) table.getModel().getValueAt(row, 4); 	// 데이터의 값을 반환
 				System.out.println("입양 신청 프로시저");
 				make_member_panel();
-			
+
 			}
 		});
-		
-		Bt2.addActionListener(new ActionListener() {		//상세 정보 버튼
+
+		Bt2.addActionListener(new ActionListener() { // 상세 정보 버튼
 			public void actionPerformed(ActionEvent e) {
 				detail_page_int_key(table1);
 				System.out.println("상세 정보");
-			
+
+			}
+		});
+
+		Bt7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				make_dogdata();
+
 			}
 		});
 //		---------------------------------------------------------------------탭1
-		
+
 		main_missing_data();
-		
 		panel2 = new JPanel(); // 실종 신고 패널 생성
 		table2 = new JTable(model2); // 입력 받은 DB 데이터들을 JTable에 추가
 		scroll2 = new JScrollPane(table2, // 목록(JTable)에 스크롤 추가
@@ -431,15 +518,15 @@ public class DBlist {
 		JtableMouseEvent2 Click2 = new JtableMouseEvent2(table2); // 더블클릭시 상세정보
 		table2.addMouseListener(Click2); //
 		Bt3 = new JButton("상세 정보");
-		Bt3.addActionListener(new ActionListener() {		//상세 정보 버튼
+		Bt3.addActionListener(new ActionListener() { // 상세 정보 버튼
 			public void actionPerformed(ActionEvent e) {
-				detail_page_str_key(table2);			
+				detail_page_str_key(table2);
 			}
 		});
 		Bt3.setBounds(630, 200, 120, 30);
 		panel2.add(Bt3);
 //		---------------------------------------------------------------------탭2
-		
+
 		main_adopt_data();
 		panel3 = new JPanel(); // 유기견 패널 생성
 		table3 = new JTable(model3); // 입력 받은 DB 데이터들을 JTable에 추가
@@ -450,10 +537,10 @@ public class DBlist {
 		panel3.setLayout(null);
 		panel3.add(scroll3); // 서브 패널에 스크롤 추가(스크롤안에 JTable이 추가되어있음)
 		table3.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 //		---------------------------------------------------------------------탭3
 		main_protection_agency_data();
-		panel4 = new JPanel(); // 유기견 패널 생성
+		panel4 = new JPanel(); // 보호소 패널 생성
 		table4 = new JTable(model4); // 입력 받은 DB 데이터들을 JTable에 추가
 		scroll4 = new JScrollPane(table4, // 목록(JTable)에 스크롤 추가
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, // 스크롤 안에 테이블을 추가(스크롤 옵션을 추가)
@@ -465,21 +552,21 @@ public class DBlist {
 		search_text = new JTextField();
 		search_text.setBounds(120, 40, 400, 30);
 		search_text.setColumns(10);
-		String sel_str = search_text.getText();  //검색창에 입력
+		String sel_str = search_text.getText(); // 검색창에 입력
 		Bt4 = new JButton("검색하기");
-		search_Lb = new JLabel("검색하시오", JLabel.CENTER);
+		search_Lb = new JLabel("지역 검색", JLabel.CENTER);
 		search_Lb.setBounds(20, 40, 100, 30);
 		Bt4.setBounds(550, 40, 120, 30);
-		Bt4.addActionListener(new ActionListener() {		
+		Bt4.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("검색 기능");
-			
+
 			}
 		});
 		panel4.add(search_text);
 		panel4.add(search_Lb);
 		panel4.add(Bt4);
-		
+
 		frame.setResizable(false); // 메인 GUI 크기 변경 불가
 		main_panel.setLayout(null);
 		pane = new JTabbedPane(JTabbedPane.TOP);
@@ -487,7 +574,7 @@ public class DBlist {
 		pane.add("유기견 목록", panel1); // 탭(pane) >> 각 목록 gui 창(sub_panel) 유기견 탭에 유기견 목록 패널 추가
 		pane.add("실종 신고 목록", panel2); // 실종 신고 탭에 유기견 목록 패널 추가
 		pane.add("입양 신청 목록", panel3); // 입양 신청 탭에 입양 신청 목록 패널 추가
-		pane.add("보호소 목록",panel4);
+		pane.add("보호소 목록", panel4);
 		frame.getContentPane().add(pane); // 프레임 >> 컨텐트팬(메인패널) >> 탭(pane)
 		frame.setVisible(true); // 보이게 하는거
 
