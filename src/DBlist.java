@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -16,6 +17,8 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 
+// import DBlist.JtableMouseEvent;
+// import DBlist.JtableMouseEvent2;
 import DTO.*;
 
 public class DBlist {
@@ -29,8 +32,8 @@ public class DBlist {
 					member_panel, sub_missing_panel,sub_alldog_panel,
 					make_dogdata_panel;
 	private JTabbedPane pane;
-	private JButton maindog_Bt1, maindog_Bt2,maindog_Bt3, main_missing_Bt, main_protection_agency_Bt, member_Bt, make_dogdata_Bt;
-	private JTextField protect_search_text, sub_missing_tF;
+	private JButton maindog_Bt1, maindog_Bt2,maindog_Bt3, maindog_Bt4, main_missing_Bt, member_Bt, make_dogdata_Bt, adopt_Bt;
+	private JTextField  sub_missing_tF, dog_search_text , adopt_search_text1, adopt_search_text2 ;
 	private JTextField[] sub_alldog_tfArray = new JTextField[9];
 	private JTextField[] sub_missing_tfArray2 = new JTextField[7];
 	private JTextField[] make_dogdata_tfArray3 = new JTextField[8];
@@ -38,8 +41,8 @@ public class DBlist {
 	private JLabel[] sub_missing_tLArray2 = new JLabel[7];
 	private JLabel[] make_dogdata_tLArray3 = new JLabel[8];
 	private JTextArea sub_alldog_tA, sub_missing_tA, make_dogdata_tA;
-	private JLabel sub_alldog_Lb, sub_missing_Lb2, make_dogdata_Lb, protect_search_Lb, sub_missing_Lb1;
-	public DefaultTableModel main_dog_model, main_missing_model, main_adopt_model, main_protection_agency_model, member_model;
+	private JLabel sub_alldog_Lb, sub_missing_Lb2, make_dogdata_Lb, sub_missing_Lb1, dog_search_Lb, adopt_search_Lb;
+	public DefaultTableModel main_dog_model, main_search_dog_model,main_missing_model, main_adopt_model, main_protection_agency_model, member_model, main_search_adopt_model;
 	public String in_name, in_kind, in_gender, in_age, in_weight, in_rescure_date, in_protect_num,
 			in_protection_agency,in_discovery_place;
 	private DB_Conn_Query dao = new DB_Conn_Query();
@@ -114,6 +117,32 @@ public class DBlist {
 			}
 		};
 	}
+	
+	public void main_dog_search_data(String local) {
+		ArrayList<abandoned_dog> main_dog_output = new ArrayList<abandoned_dog>();
+		String main_dog_colName[] = { "유기견번호", "유기견이름", "품종", "성별", "보호기관번호" }; // 컬럼명을 배열에 선언
+		main_dog_output = dao.p_local_abandoned_dog(local);
+		int main_dog_size = main_dog_output.size();
+		String main_dog_data[][] = new String[main_dog_size][5];
+
+		for (int i = 0; i < main_dog_output.size(); i++) {
+			String main_dog_num = Integer.toString(main_dog_output.get(i).getNum());
+			String main_dog_name = main_dog_output.get(i).getName();
+			String main_dog_kind = main_dog_output.get(i).getKind();
+			String main_dog_gender = main_dog_output.get(i).getGender();
+			String main_dog_protect_agency = main_dog_output.get(i).getProtection_agency();
+			main_dog_data[i][0] = main_dog_num;
+			main_dog_data[i][1] = main_dog_name;
+			main_dog_data[i][2] = main_dog_kind;
+			main_dog_data[i][3] = main_dog_gender;
+			main_dog_data[i][4] = main_dog_protect_agency;
+		}
+		main_search_dog_model = new DefaultTableModel(main_dog_data, main_dog_colName) {
+			public boolean isCellEditable(int rowIndex, int mColIndex) { // 목록(JTable) 값 수정 못하게 하는 메소드
+				return false;
+			}
+		};
+	}
 
 	public void main_missing_data() {
 		ArrayList<missing> main_missing_output = new ArrayList<missing>();
@@ -171,6 +200,36 @@ public class DBlist {
 		};
 	}
 
+	public void main_adopt_search_data(String year, String month) {
+		ArrayList<adopt> main_adopt_output = new ArrayList<adopt>();
+		String main_adopt_colName[] = { "입양신청번호", "신청 일자", "유기견 이름", "유기견 품종", "유기견 성별", "보호기관번호", "입양자 아이디" }; // 컬럼명을 배열에 선언
+		main_adopt_output = dao.read_adopt(year, month);
+		int main_adopt_size = main_adopt_output.size();
+		String main_adopt_data[][] = new String[main_adopt_size][7];
+		for (int i = 0; i < main_adopt_output.size(); i++) {
+			String adopt_num_data = main_adopt_output.get(i).getAdopt_num();
+			String adopt_date_data = main_adopt_output.get(i).getAdopt_date().toString();
+			String adopt_dog_name_data = main_adopt_output.get(i).getAdopt_dog_name();
+			String adopt_dog_kind_data = main_adopt_output.get(i).getAdopt_dog_kind();
+			String adopt_dog_sex_data = main_adopt_output.get(i).getAdopt_dog_sex();
+			String shelter_num_data = main_adopt_output.get(i).getShelter_num();
+			String adopt_id_data = main_adopt_output.get(i).getId();
+			main_adopt_data[i][0] = adopt_num_data;
+			main_adopt_data[i][1] = adopt_date_data;
+			main_adopt_data[i][2] = adopt_dog_name_data;
+			main_adopt_data[i][3] = adopt_dog_kind_data;
+			main_adopt_data[i][4] = adopt_dog_sex_data;
+			main_adopt_data[i][5] = shelter_num_data;
+			main_adopt_data[i][6] = adopt_id_data;
+
+		}
+		main_search_adopt_model = new DefaultTableModel(main_adopt_data, main_adopt_colName) {
+			public boolean isCellEditable(int rowIndex, int mColIndex) { // 목록(JTable) 값 수정 못하게 하는 메소드
+				return false;
+			}
+		};
+	}
+	
 	public void main_protection_agency_data() {
 		ArrayList<protection_agency> main_protection_agency_output = new ArrayList<protection_agency>();
 		String main_protection_agency_colName[] = { "보호기관번호", "보호기관명", "주소", "전화번호", "보호 중인 유기견 수" }; // 컬럼명을 배열에 선언
@@ -342,10 +401,11 @@ public class DBlist {
 		sub_missing_frame.setVisible(true);
 	}
 
-	public void make_member_panel() {
+	// 입양 신청 창
+	public void make_member_panel(String 보호기관번호, String 유기견번호) {
 		member_frame = new JFrame(); // 프레임 생성
 		member_frame.setBounds(100, 100, 800, 600);
-		member_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		member_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		member_panel = new JPanel(); // 메인 패널 생성
 		member_panel.setBounds(100, 100, 700, 500);
 		member_frame.setContentPane(member_panel);
@@ -359,8 +419,13 @@ public class DBlist {
 		member_Bt = new JButton("입양 신청서 작성");
 		member_Bt.addActionListener(new ActionListener() { // 상세 정보 버튼
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("입양 신청서 작성?");
-
+				int row = member_table.getSelectedRow();							// 목록에서 선택한 데이터의 행을 반환
+				String 회원아이디 = (String) member_table.getModel().getValueAt(row, 0); 	// 데이터의 값을 반환
+				System.out.println(회원아이디);
+				dao.p_adoption(보호기관번호, 회원아이디, Integer.parseInt(유기견번호));
+				JOptionPane.showMessageDialog(null, "입양 신청이 완료되었습니다.");
+				member_frame.setVisible(false);
+				make_main_frame();
 			}
 		});
 		member_Bt.setBounds(600, 200, 150, 30);
@@ -370,10 +435,11 @@ public class DBlist {
 		member_frame.setVisible(true);
 	}
 
+	// 유기견 데이터 입력 창
 	public void make_dogdata() {
 		make_dogdata_frame = new JFrame(); // 프레임 생성
 		make_dogdata_frame.setBounds(100, 100, 911, 500);
-		make_dogdata_frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		make_dogdata_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		make_dogdata_panel = new JPanel(); // 메인 패널 생성
 		make_dogdata_panel.setBounds(0, 0, 897, 480);
 		make_dogdata_frame.setContentPane(make_dogdata_panel);
@@ -419,20 +485,12 @@ public class DBlist {
 				in_protection_agency = make_dogdata_tfArray3[7].getText();
 				in_discovery_place = make_dogdata_tA.getText();
 				
-				System.out.println("유기견 등록 기능");
-				System.out.println(in_name);
-				System.out.println(in_kind);
-				System.out.println(in_gender);
-				System.out.println(in_age);
-				System.out.println(in_weight);
-				System.out.println(in_rescure_date);
-				System.out.println(in_protect_num);
-				System.out.println(in_protection_agency);
-				System.out.println(in_discovery_place);
-
+				dao.insert_abandoned_dog(in_name, in_kind, in_gender, in_age, in_weight, in_rescure_date, in_discovery_place, in_protect_num, in_protection_agency);
+				JOptionPane.showMessageDialog(null, "유기견 정보가 입력되었습니다.");
+//				make_dogdata_frame.setVisible(false);
+//				make_main_frame();
 			}
 		});
-
 		make_dogdata_frame.setVisible(true);
 	}
 
@@ -450,7 +508,7 @@ public class DBlist {
 		main_dog_scroll = new JScrollPane(main_dog_table, // 목록(JTable)에 스크롤 추가
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, // 스크롤 안에 테이블을 추가(스크롤 옵션을 추가)
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		main_dog_scroll.setBounds(0, 50, 600, 480); // 위치 설정
+		main_dog_scroll.setBounds(0, 120, 600, 400); // 위치 설정
 		main_dog_panel.setLayout(null);
 		main_dog_panel.add(main_dog_scroll); // 서브 패널에 스크롤 추가(스크롤안에 JTable이 추가되어있음)
 		main_dog_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //
@@ -471,31 +529,47 @@ public class DBlist {
 
 		maindog_Bt1.addActionListener(new ActionListener() { // 입양 신청 버튼
 			public void actionPerformed(ActionEvent e) {
-//				int row = table.getSelectedRow();							// 목록에서 선택한 데이터의 행을 반환
-//				String 유기견이름 = (String) table.getModel().getValueAt(row, 1); 	// 데이터의 값을 반환
-//				String 유기견품종 = (String) table.getModel().getValueAt(row, 2); 	// 데이터의 값을 반환
-//				String 유기견성별 = (String) table.getModel().getValueAt(row, 3); 	// 데이터의 값을 반환
-//				String 보호기관번호 = (String) table.getModel().getValueAt(row, 4); 	// 데이터의 값을 반환
-				System.out.println("입양 신청 프로시저");
-				make_member_panel();
-
+				int row = main_dog_table.getSelectedRow();							// 목록에서 선택한 데이터의 행을 반환
+				String 유기견번호 = (String) main_dog_table.getModel().getValueAt(row, 0); 	// 데이터의 값을 반환
+				String 보호기관번호 = (String) main_dog_table.getModel().getValueAt(row, 4); 	// 데이터의 값을 반환
+				System.out.println(유기견번호);
+				System.out.println(보호기관번호);
+				make_member_panel(보호기관번호,유기견번호);
+				main_frame.setVisible(false);
 			}
 		});
 
 		maindog_Bt2.addActionListener(new ActionListener() { // 상세 정보 버튼
 			public void actionPerformed(ActionEvent e) {
 				detail_page_int_key(main_dog_table);
-				System.out.println("상세 정보");
-
 			}
 		});
 
 		maindog_Bt3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				make_dogdata();
-
+				main_frame.setVisible(false);
 			}
 		});
+		
+		dog_search_text = new JTextField();
+		dog_search_text.setBounds(120, 40, 400, 30);
+		dog_search_text.setColumns(10);
+		maindog_Bt4 = new JButton("검색하기");
+		dog_search_Lb = new JLabel("지역 검색", JLabel.CENTER);
+		dog_search_Lb.setBounds(20, 40, 100, 30);
+		maindog_Bt4.setBounds(550, 40, 120, 30);
+		maindog_Bt4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String search_str = dog_search_text.getText();
+				main_dog_search_data(search_str);
+				main_dog_table.setModel(main_search_dog_model);
+			}
+		});
+		main_dog_panel.add(dog_search_text);
+		main_dog_panel.add(dog_search_Lb);
+		main_dog_panel.add(maindog_Bt4);
+		
 //		---------------------------------------------------------------------탭1
 
 		main_missing_data();
@@ -521,15 +595,38 @@ public class DBlist {
 //		---------------------------------------------------------------------탭2
 
 		main_adopt_data();
-		main_adopt_panel = new JPanel(); // 유기견 패널 생성
+		main_adopt_panel = new JPanel(); // 입양신청 패널 생성
 		main_adopt_table = new JTable(main_adopt_model); // 입력 받은 DB 데이터들을 JTable에 추가
 		main_adopt_scroll = new JScrollPane(main_adopt_table, // 목록(JTable)에 스크롤 추가
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, // 스크롤 안에 테이블을 추가(스크롤 옵션을 추가)
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		main_adopt_scroll.setBounds(0, 50, 770, 480); // 위치 설정
+		main_adopt_scroll.setBounds(0, 100, 770, 480); // 위치 설정
 		main_adopt_panel.setLayout(null);
 		main_adopt_panel.add(main_adopt_scroll); // 서브 패널에 스크롤 추가(스크롤안에 JTable이 추가되어있음)
 		main_adopt_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		
+		adopt_search_text1 = new JTextField();
+		adopt_search_text1.setBounds(200, 40, 150, 30);
+		adopt_search_text1.setColumns(10);
+		adopt_search_text2 = new JTextField();
+		adopt_search_text2.setBounds(350, 40, 150, 30);
+		adopt_search_text2.setColumns(10);
+		adopt_Bt = new JButton("검색하기");
+		adopt_search_Lb = new JLabel("날짜(년,월) 검색", JLabel.CENTER);
+		adopt_search_Lb.setBounds(80, 40, 90, 30);
+		adopt_Bt.setBounds(550, 40, 120, 30);
+		adopt_Bt.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String year = adopt_search_text1.getText();
+				String month = adopt_search_text2.getText();
+				main_adopt_search_data(year,month);
+				main_adopt_table.setModel(main_search_adopt_model);
+			}
+		});
+		main_adopt_panel.add(adopt_search_text1);
+		main_adopt_panel.add(adopt_search_text2);
+		main_adopt_panel.add(adopt_search_Lb);
+		main_adopt_panel.add(adopt_Bt);
 
 //		---------------------------------------------------------------------탭3
 		main_protection_agency_data();
@@ -538,28 +635,11 @@ public class DBlist {
 		main_protection_agency_scroll = new JScrollPane(main_protection_agency_table, // 목록(JTable)에 스크롤 추가
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, // 스크롤 안에 테이블을 추가(스크롤 옵션을 추가)
 				JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		main_protection_agency_scroll.setBounds(0, 120, 770, 400); // 위치 설정
+		main_protection_agency_scroll.setBounds(0, 50, 770, 480); // 위치 설정
 		main_protection_agency_panel.setLayout(null);
 		main_protection_agency_panel.add(main_protection_agency_scroll); // 서브 패널에 스크롤 추가(스크롤안에 JTable이 추가되어있음)
 		main_protection_agency_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		protect_search_text = new JTextField();
-		protect_search_text.setBounds(120, 40, 400, 30);
-		protect_search_text.setColumns(10);
-		String search_str = protect_search_text.getText(); // 검색창에 입력
-		main_protection_agency_Bt = new JButton("검색하기");
-		protect_search_Lb = new JLabel("지역 검색", JLabel.CENTER);
-		protect_search_Lb.setBounds(20, 40, 100, 30);
-		main_protection_agency_Bt.setBounds(550, 40, 120, 30);
-		main_protection_agency_Bt.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("검색 기능");
-
-			}
-		});
-		main_protection_agency_panel.add(protect_search_text);
-		main_protection_agency_panel.add(protect_search_Lb);
-		main_protection_agency_panel.add(main_protection_agency_Bt);
-
+		
 		main_frame.setResizable(false); // 메인 GUI 크기 변경 불가
 		main_panel.setLayout(null);
 		pane = new JTabbedPane(JTabbedPane.TOP);
