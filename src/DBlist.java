@@ -32,14 +32,14 @@ public class DBlist {
 					member_panel, sub_missing_panel,sub_alldog_panel,
 					make_dogdata_panel;
 	private JTabbedPane pane;
-	private JButton maindog_Bt1, maindog_Bt2,maindog_Bt3, maindog_Bt4, main_missing_Bt, member_Bt, make_dogdata_Bt, adopt_Bt;
+	private JButton maindog_Bt1, maindog_Bt2,maindog_Bt3, maindog_Bt4, main_missing_Bt1,main_missing_Bt2, member_Bt, make_dogdata_Bt, adopt_Bt;
 	private JTextField  sub_missing_tF, dog_search_text , adopt_search_text1, adopt_search_text2 ;
 	private JTextField[] sub_alldog_tfArray = new JTextField[9];
 	private JTextField[] sub_missing_tfArray2 = new JTextField[7];
-	private JTextField[] make_dogdata_tfArray3 = new JTextField[8];
+	private JTextField[] make_dogdata_tfArray3 = new JTextField[7];
 	private JLabel[] sub_alldog_tLArray = new JLabel[9];
 	private JLabel[] sub_missing_tLArray2 = new JLabel[7];
-	private JLabel[] make_dogdata_tLArray3 = new JLabel[8];
+	private JLabel[] make_dogdata_tLArray3 = new JLabel[7];
 	private JTextArea sub_alldog_tA, sub_missing_tA, make_dogdata_tA;
 	private JLabel sub_alldog_Lb, sub_missing_Lb2, make_dogdata_Lb, sub_missing_Lb1, dog_search_Lb, adopt_search_Lb;
 	public DefaultTableModel main_dog_model, main_search_dog_model,main_missing_model, main_adopt_model, main_protection_agency_model, member_model, main_search_adopt_model;
@@ -92,23 +92,27 @@ public class DBlist {
 	}
 
 	public void main_dog_data() {
-		ArrayList<abandoned_dog> main_dog_output = new ArrayList<abandoned_dog>();
-		String main_dog_colName[] = { "유기견번호", "유기견이름", "품종", "성별", "보호기관번호" }; // 컬럼명을 배열에 선언
+		ArrayList<dog_join_protect> main_dog_output = new ArrayList<dog_join_protect>();
+		String main_dog_colName[] = { "유기견번호", "유기견이름", "품종", "성별", "보호기관번호","보호기관명","지역" }; // 컬럼명을 배열에 선언
 		main_dog_output = dao.read_abandoned_dog();
 		int main_dog_size = main_dog_output.size();
-		String main_dog_data[][] = new String[main_dog_size][5];
+		String main_dog_data[][] = new String[main_dog_size][7];
 
 		for (int i = 0; i < main_dog_output.size(); i++) {
 			String main_dog_num = Integer.toString(main_dog_output.get(i).getNum());
 			String main_dog_name = main_dog_output.get(i).getName();
 			String main_dog_kind = main_dog_output.get(i).getKind();
 			String main_dog_gender = main_dog_output.get(i).getGender();
-			String main_dog_protect_agency = main_dog_output.get(i).getProtection_agency();
+			String main_dog_protect_agency = main_dog_output.get(i).getProtect_agency();
+			String main_dog_protect_name = main_dog_output.get(i).getProtect_name();
+			String main_dog_protect_address = main_dog_output.get(i).getAddress();
 			main_dog_data[i][0] = main_dog_num;
 			main_dog_data[i][1] = main_dog_name;
 			main_dog_data[i][2] = main_dog_kind;
 			main_dog_data[i][3] = main_dog_gender;
 			main_dog_data[i][4] = main_dog_protect_agency;
+			main_dog_data[i][5] = main_dog_protect_name;
+			main_dog_data[i][6] = main_dog_protect_address;
 
 		}
 		main_dog_model = new DefaultTableModel(main_dog_data, main_dog_colName) {
@@ -118,24 +122,28 @@ public class DBlist {
 		};
 	}
 	
-	public void main_dog_search_data(String local) {
-		ArrayList<abandoned_dog> main_dog_output = new ArrayList<abandoned_dog>();
-		String main_dog_colName[] = { "유기견번호", "유기견이름", "품종", "성별", "보호기관번호" }; // 컬럼명을 배열에 선언
+	public void main_dog_search_data(String local) {												// 내용 추가
+		ArrayList<dog_join_protect> main_dog_output = new ArrayList<dog_join_protect>();
+		String main_dog_colName[] = { "유기견번호", "유기견이름", "품종", "성별", "보호기관번호","보호기관명","지역" }; // 컬럼명을 배열에 선언
 		main_dog_output = dao.p_local_abandoned_dog(local);
 		int main_dog_size = main_dog_output.size();
-		String main_dog_data[][] = new String[main_dog_size][5];
+		String main_dog_data[][] = new String[main_dog_size][7];
 
 		for (int i = 0; i < main_dog_output.size(); i++) {
 			String main_dog_num = Integer.toString(main_dog_output.get(i).getNum());
 			String main_dog_name = main_dog_output.get(i).getName();
 			String main_dog_kind = main_dog_output.get(i).getKind();
 			String main_dog_gender = main_dog_output.get(i).getGender();
-			String main_dog_protect_agency = main_dog_output.get(i).getProtection_agency();
+			String main_dog_protect_agency = main_dog_output.get(i).getProtect_agency();
+			String main_dog_protect_name = main_dog_output.get(i).getProtect_name();
+			String main_dog_protect_address = main_dog_output.get(i).getAddress();
 			main_dog_data[i][0] = main_dog_num;
 			main_dog_data[i][1] = main_dog_name;
 			main_dog_data[i][2] = main_dog_kind;
 			main_dog_data[i][3] = main_dog_gender;
 			main_dog_data[i][4] = main_dog_protect_agency;
+			main_dog_data[i][5] = main_dog_protect_name;
+			main_dog_data[i][6] = main_dog_protect_address;
 		}
 		main_search_dog_model = new DefaultTableModel(main_dog_data, main_dog_colName) {
 			public boolean isCellEditable(int rowIndex, int mColIndex) { // 목록(JTable) 값 수정 못하게 하는 메소드
@@ -428,6 +436,8 @@ public class DBlist {
 				make_main_frame();
 			}
 		});
+//		JOptionPane.showMessageDialog(null, "6개월 이내에 입양기록이 있는 회원이므로 입양이 불가능합니다.",
+//				"입양 조건 미충족", JOptionPane.WARNING_MESSAGE);									// 입양 미충족 메시지창
 		member_Bt.setBounds(600, 200, 150, 30);
 		member_panel.add(member_Bt);
 		member_panel.add(member_scroll); // 서브 패널에 스크롤 추가(스크롤안에 JTable이 추가되어있음)
@@ -444,7 +454,7 @@ public class DBlist {
 		make_dogdata_panel.setBounds(0, 0, 897, 480);
 		make_dogdata_frame.setContentPane(make_dogdata_panel);
 		make_dogdata_panel.setLayout(null);
-		String[] make_dogdata_headArr3 = { "유기견이름", "유기견품종", "성별", "나이", "몸무게", "구조 일자", "보호등록번호", "보호기관번호" };
+		String[] make_dogdata_headArr3 = { "유기견이름", "유기견품종", "성별", "나이", "몸무게", "구조 일자", "보호기관번호" };
 
 		for (int i = 0; i < make_dogdata_tLArray3.length; i++) {
 			make_dogdata_tLArray3[i] = new JLabel(make_dogdata_headArr3[i], JLabel.CENTER);
@@ -473,7 +483,7 @@ public class DBlist {
 		make_dogdata_Bt.setBounds(600, 400, 150, 30);
 		make_dogdata_panel.add(make_dogdata_Bt);
 
-		make_dogdata_Bt.addActionListener(new ActionListener() { // 상세 정보 버튼
+		make_dogdata_Bt.addActionListener(new ActionListener() { // 유기견 등록
 			public void actionPerformed(ActionEvent e) {
 				in_name = make_dogdata_tfArray3[0].getText();
 				in_kind = make_dogdata_tfArray3[1].getText();
@@ -481,14 +491,13 @@ public class DBlist {
 				in_age = make_dogdata_tfArray3[3].getText();
 				in_weight = make_dogdata_tfArray3[4].getText();
 				in_rescure_date = make_dogdata_tfArray3[5].getText();
-				in_protect_num = make_dogdata_tfArray3[6].getText();
-				in_protection_agency = make_dogdata_tfArray3[7].getText();
+				in_protection_agency = make_dogdata_tfArray3[6].getText();
 				in_discovery_place = make_dogdata_tA.getText();
-				
-				dao.insert_abandoned_dog(in_name, in_kind, in_gender, in_age, in_weight, in_rescure_date, in_discovery_place, in_protect_num, in_protection_agency);
+				dao.insert_abandoned_dog(in_name, in_kind, in_gender, in_age, in_weight, in_rescure_date, in_discovery_place,in_protection_agency);
 				JOptionPane.showMessageDialog(null, "유기견 정보가 입력되었습니다.");
-//				make_dogdata_frame.setVisible(false);
-//				make_main_frame();
+				make_dogdata_frame.setVisible(false);
+				main_frame.setVisible(false); // 메인화면 새로고침 느낌
+				make_main_frame();				 // 메인화면 새로고침 느낌
 			}
 		});
 		make_dogdata_frame.setVisible(true);
@@ -519,9 +528,9 @@ public class DBlist {
 		maindog_Bt2 = new JButton("상세 정보");
 		maindog_Bt3 = new JButton("유기견 등록");
 
-		maindog_Bt1.setBounds(630, 100, 120, 30);
-		maindog_Bt2.setBounds(630, 200, 120, 30);
-		maindog_Bt3.setBounds(630, 300, 120, 30);
+		maindog_Bt1.setBounds(630, 120, 120, 30);
+		maindog_Bt2.setBounds(630, 220, 120, 30);
+		maindog_Bt3.setBounds(630, 320, 120, 30);
 
 		main_dog_panel.add(maindog_Bt1);
 		main_dog_panel.add(maindog_Bt2);
@@ -548,7 +557,6 @@ public class DBlist {
 		maindog_Bt3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				make_dogdata();
-				main_frame.setVisible(false);
 			}
 		});
 		
@@ -584,14 +592,24 @@ public class DBlist {
 		main_missing_table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); //
 		JtableMouseEvent2 Click2 = new JtableMouseEvent2(main_missing_table); // 더블클릭시 상세정보
 		main_missing_table.addMouseListener(Click2); //
-		main_missing_Bt = new JButton("상세 정보");
-		main_missing_Bt.addActionListener(new ActionListener() { // 상세 정보 버튼
+		main_missing_Bt1 = new JButton("상세 정보");
+		main_missing_Bt2 = new JButton("삭제하기");
+		main_missing_Bt1.addActionListener(new ActionListener() { // 상세 정보 버튼
 			public void actionPerformed(ActionEvent e) {
 				detail_page_str_key(main_missing_table);
 			}
+		});														// 내용 추가
+		main_missing_Bt2.addActionListener(new ActionListener() { // 삭제하기 버튼
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "6개월 이내에 입양기록이 있는 회원이므로 입양이 불가능합니다.",
+						"입양 조건 미충족", JOptionPane.WARNING_MESSAGE);// 입양 미충족 메시지창
+				System.out.println("삭제하는 기능");
+			}
 		});
-		main_missing_Bt.setBounds(630, 200, 120, 30);
-		main_missing_panel.add(main_missing_Bt);
+		main_missing_Bt1.setBounds(630, 50, 120, 30);
+		main_missing_Bt2.setBounds(630, 150, 120, 30);
+		main_missing_panel.add(main_missing_Bt1);
+		main_missing_panel.add(main_missing_Bt2);
 //		---------------------------------------------------------------------탭2
 
 		main_adopt_data();
@@ -615,7 +633,7 @@ public class DBlist {
 		adopt_search_Lb = new JLabel("날짜(년,월) 검색", JLabel.CENTER);
 		adopt_search_Lb.setBounds(80, 40, 90, 30);
 		adopt_Bt.setBounds(550, 40, 120, 30);
-		adopt_Bt.addActionListener(new ActionListener() {
+		adopt_Bt.addActionListener(new ActionListener() { // 입양신청 버튼
 			public void actionPerformed(ActionEvent e) {
 				String year = adopt_search_text1.getText();
 				String month = adopt_search_text2.getText();
